@@ -1,5 +1,5 @@
 import PageHead from "@/components/commons/PageHead";
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 interface PropTypes {
   title?: string;
@@ -10,10 +10,10 @@ const AuthLayout = (props: PropTypes) => {
   const { title, children } = props;
 
   return (
-    <>
+    <Fragment>
       <PageHead title={title} />
-      <section className="3xl:container max-w-3xl p-6">{children}</section>
-    </>
+      <section className="3xl:container w-full p-6 px-0">{children}</section>
+    </Fragment>
   );
 };
 
