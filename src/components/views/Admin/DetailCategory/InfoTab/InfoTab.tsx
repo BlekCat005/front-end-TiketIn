@@ -6,15 +6,41 @@ import {
   CardHeader,
   Input,
   Skeleton,
+  Spinner,
   Textarea,
 } from "@heroui/react";
+import useInfoTab from "./useInfoTab";
+import { Controller } from "react-hook-form";
+import { useEffect } from "react";
 
 interface PropTypes {
   dataCategory: ICategory;
+  onUpdate: (data: ICategory) => void;
+  isPendingUpdate: boolean;
+  isSuccessUpdate: boolean;
 }
 
 const InfoTab = (props: PropTypes) => {
-  const { dataCategory } = props;
+  const { dataCategory, onUpdate, isPendingUpdate, isSuccessUpdate } = props;
+  const {
+    controlUpdateInfo,
+    handleSubmitUpdateInfo,
+    errorsUpdateInfo,
+    resetUpdateInfo,
+    setValueUpdateInfo,
+  } = useInfoTab();
+
+  useEffect(() => {
+    setValueUpdateInfo("name", `${dataCategory?.name}`);
+    setValueUpdateInfo("description", `${dataCategory?.description}`);
+  }, [dataCategory]);
+
+  useEffect(() => {
+    if (isSuccessUpdate) {
+      resetUpdateInfo();
+    }
+  }, [isSuccessUpdate]);
+
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
@@ -24,24 +50,43 @@ const InfoTab = (props: PropTypes) => {
         </p>
       </CardHeader>
       <CardBody>
-        <form className="flex flex-col gap-4" onSubmit={() => []}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmitUpdateInfo(onUpdate)}
+        >
           <Skeleton isLoaded={!!dataCategory?.name} className="rounded-lg">
-            <Input
-              type="text"
-              className="mt-2"
-              label="Category Name"
-              labelPlacement="outside"
-              variant="bordered"
-              defaultValue={dataCategory?.name}
+            <Controller
+              control={controlUpdateInfo}
+              name="name"
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  autoFocus
+                  label="Category Name"
+                  labelPlacement="outside"
+                  variant="bordered"
+                  type="text"
+                  isInvalid={errorsUpdateInfo.name !== undefined}
+                  errorMessage={errorsUpdateInfo.name?.message}
+                  className="mt-2"
+                />
+              )}
             />
           </Skeleton>
           <Skeleton isLoaded={!!dataCategory?.name} className="rounded-lg">
-            <Textarea
-              className="mt-2"
-              label="Category Description"
-              labelPlacement="outside"
-              variant="bordered"
-              defaultValue={dataCategory?.description}
+            <Controller
+              control={controlUpdateInfo}
+              name="description"
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  label="Category Description"
+                  labelPlacement="outside"
+                  variant="bordered"
+                  isInvalid={errorsUpdateInfo.description !== undefined}
+                  errorMessage={errorsUpdateInfo.description?.message}
+                />
+              )}
             />
           </Skeleton>
 
@@ -49,8 +94,13 @@ const InfoTab = (props: PropTypes) => {
             color="danger"
             className="mt-2 disabled:bg-default-500"
             type="submit"
+            disabled={isPendingUpdate || !dataCategory?._id}
           >
-            Save Changes
+            {isPendingUpdate ? (
+              <Spinner size="sm" color="white" />
+            ) : (
+              "Save Changes"
+            )}
           </Button>
         </form>
       </CardBody>
