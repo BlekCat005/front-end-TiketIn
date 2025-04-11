@@ -5,6 +5,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,6 +15,8 @@ import { COLUMN_LIST_CATEGORY } from "./Category.constants";
 import { LIMIT_LISTS } from "@/constants/list.constants";
 import useCategory from "./useCategory";
 import InputFile from "@/components/ui/InputFIle";
+import AddCategoryModal from "./AddCategoryModal";
+import DeleteCategoryModal from "./DeleteCategoryModal";
 
 const Category = () => {
   const { push, isReady, query } = useRouter();
@@ -23,13 +26,20 @@ const Category = () => {
     dataCategory,
     isLoadingCategory,
     isRefetchingCategory,
+    refetchCategory,
     setURL,
     handleChangeLimit,
     handleChangeLimitFromSelect,
     handleChangePage,
     handleClearSearch,
     handleSearch,
+
+    selectedId,
+    setSelectedId,
   } = useCategory();
+
+  const addCategoryModalDisclosure = useDisclosure();
+  const deleteCategoryModalDisclosure = useDisclosure();
 
   useEffect(() => {
     if (isReady) {
@@ -42,10 +52,10 @@ const Category = () => {
       const cellValue = category[columnKey as keyof typeof category];
 
       switch (columnKey) {
-        // case "icon":
-        //   return (
-        //     <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
-        //   );
+        case "icon":
+          return (
+            <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
+          );
 
         case "actions":
           return (
@@ -62,7 +72,14 @@ const Category = () => {
                 >
                   Detail Category
                 </DropdownItem>
-                <DropdownItem key="delete-category" className="text-danger-500">
+                <DropdownItem
+                  key="delete-category"
+                  className="text-danger-500"
+                  onPress={() => {
+                    setSelectedId(`${category._id}`);
+                    deleteCategoryModalDisclosure.onOpen();
+                  }}
+                >
                   Delete Category
                 </DropdownItem>
               </DropdownMenu>
@@ -91,13 +108,21 @@ const Category = () => {
           onChangeSearch={handleSearch}
           onClearSearch={handleClearSearch}
           buttonTopContentLabel="Create Category"
-          onClickButtonTopContent={() => {}}
+          onClickButtonTopContent={addCategoryModalDisclosure.onOpen}
           totalPages={dataCategory?.pagination.totalPages}
           isLoading={isLoadingCategory || isRefetchingCategory}
         />
       )}
-
-      <InputFile name="input" isDropable />
+      <AddCategoryModal
+        refetchCategory={refetchCategory}
+        {...addCategoryModalDisclosure}
+      />
+      <DeleteCategoryModal
+        refetchCategory={refetchCategory}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+        {...deleteCategoryModalDisclosure}
+      />
     </section>
   );
 };
