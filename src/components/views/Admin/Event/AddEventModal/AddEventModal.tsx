@@ -292,6 +292,19 @@ const AddEventModal = (props: PropTypes) => {
                     />
                   )}
                 />
+                <Controller
+                  control={control}
+                  name="address"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      label="Address"
+                      variant="bordered"
+                      isInvalid={errors.address !== undefined}
+                      errorMessage={errors.address?.message}
+                    />
+                  )}
+                />
               </div>
               <p className="text-sm font-bold">Banner</p>
               <Controller

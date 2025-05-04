@@ -1,4 +1,3 @@
-import { ICategory } from "@/types/Category";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -6,44 +5,39 @@ import {
   Card,
   CardBody,
   CardHeader,
-  DatePicker,
   Input,
   Select,
   SelectItem,
   Skeleton,
   Spinner,
-  Textarea,
 } from "@heroui/react";
-import useInfoTab from "./useLocationTab";
+import useLocationTab from "./useLocationTab";
 import { Controller } from "react-hook-form";
 import { useEffect } from "react";
 import { IEventForm, IRegency } from "@/types/Event";
-import { getLocalTimeZone, now } from "@internationalized/date";
-import { toInputDate } from "@/utils/date";
-import useLocationTab from "./useLocationTab";
 
 interface PropTypes {
   dataEvent: IEventForm;
+  dataDefaultRegion: string;
+  isPendingDefaultRegion: boolean;
   onUpdate: (data: IEventForm) => void;
   isPendingUpdate: boolean;
   isSuccessUpdate: boolean;
-  dataDefaultRegion: string;
-  isPendingDefaultRegion: boolean;
 }
 
 const LocationTab = (props: PropTypes) => {
   const {
     dataEvent,
+    dataDefaultRegion,
+    isPendingDefaultRegion,
     onUpdate,
     isPendingUpdate,
     isSuccessUpdate,
-    dataDefaultRegion,
-    isPendingDefaultRegion,
   } = props;
   const {
     controlUpdateLocation,
-    handleSubmitUpdateLocation,
     errorsUpdateLocation,
+    handleSubmitUpdateLocation,
     resetUpdateLocation,
     setValueUpdateLocation,
 
@@ -53,17 +47,19 @@ const LocationTab = (props: PropTypes) => {
   } = useLocationTab();
 
   useEffect(() => {
-    console.log(dataEvent);
-    setValueUpdateLocation("isOnline", `${dataEvent?.isOnline}`);
-    setValueUpdateLocation("region", `${dataEvent?.region}`);
-    setValueUpdateLocation(
-      "latitude",
-      `${dataEvent?.location?.coordinates[0]}`,
-    );
-    setValueUpdateLocation(
-      "longitude",
-      `${dataEvent?.location?.coordinates[1]}`,
-    );
+    if (dataEvent) {
+      setValueUpdateLocation("address", `${dataEvent?.location?.address}`);
+      setValueUpdateLocation("isOnline", `${dataEvent?.isOnline}`);
+      setValueUpdateLocation("region", `${dataEvent?.location?.region}`);
+      setValueUpdateLocation(
+        "latitude",
+        `${dataEvent?.location?.coordinates[0]}`,
+      );
+      setValueUpdateLocation(
+        "longitude",
+        `${dataEvent?.location?.coordinates[1]}`,
+      );
+    }
   }, [dataEvent]);
 
   useEffect(() => {
@@ -71,7 +67,6 @@ const LocationTab = (props: PropTypes) => {
       resetUpdateLocation();
     }
   }, [isSuccessUpdate]);
-
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
@@ -82,13 +77,33 @@ const LocationTab = (props: PropTypes) => {
       </CardHeader>
       <CardBody>
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-4"
           onSubmit={handleSubmitUpdateLocation(onUpdate)}
         >
-          <Skeleton isLoaded={!!dataEvent?.isPublish} className="rounded-lg">
+          <Skeleton
+            isLoaded={!!dataEvent?.location?.address}
+            className="rounded-lg"
+          >
             <Controller
+              name="address"
               control={controlUpdateLocation}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Address"
+                  variant="bordered"
+                  labelPlacement="outside"
+                  type="text"
+                  isInvalid={errorsUpdateLocation.address !== undefined}
+                  errorMessage={errorsUpdateLocation.address?.message}
+                />
+              )}
+            />
+          </Skeleton>
+          <Skeleton isLoaded={!!dataEvent} className="rounded-lg">
+            <Controller
               name="isOnline"
+              control={controlUpdateLocation}
               render={({ field }) => (
                 <Select
                   {...field}
@@ -100,8 +115,12 @@ const LocationTab = (props: PropTypes) => {
                   disallowEmptySelection
                   defaultSelectedKeys={[dataEvent?.isOnline ? "true" : "false"]}
                 >
-                  <SelectItem key="true">Online</SelectItem>
-                  <SelectItem key="false">Offline</SelectItem>
+                  <SelectItem key="true" value="true">
+                    Online
+                  </SelectItem>
+                  <SelectItem key="false" value="false">
+                    Offline
+                  </SelectItem>
                 </Select>
               )}
             />
@@ -111,19 +130,17 @@ const LocationTab = (props: PropTypes) => {
             className="rounded-lg"
           >
             <Controller
-              control={controlUpdateLocation}
               name="latitude"
+              control={controlUpdateLocation}
               render={({ field }) => (
                 <Input
                   {...field}
-                  autoFocus
-                  label="Event Latitude"
-                  labelPlacement="outside"
+                  label="Latitude"
                   variant="bordered"
+                  labelPlacement="outside"
                   type="text"
                   isInvalid={errorsUpdateLocation.latitude !== undefined}
                   errorMessage={errorsUpdateLocation.latitude?.message}
-                  className="mt-2"
                 />
               )}
             />
@@ -133,49 +150,46 @@ const LocationTab = (props: PropTypes) => {
             className="rounded-lg"
           >
             <Controller
-              control={controlUpdateLocation}
               name="longitude"
+              control={controlUpdateLocation}
               render={({ field }) => (
                 <Input
                   {...field}
-                  autoFocus
-                  label="Event Longitude"
-                  labelPlacement="outside"
+                  label="Longitude"
                   variant="bordered"
+                  labelPlacement="outside"
                   type="text"
                   isInvalid={errorsUpdateLocation.longitude !== undefined}
                   errorMessage={errorsUpdateLocation.longitude?.message}
-                  className="mt-2"
                 />
               )}
             />
           </Skeleton>
-
           <Skeleton
             isLoaded={!!dataEvent?.location?.region && !isPendingDefaultRegion}
             className="rounded-lg"
           >
             {!isPendingDefaultRegion ? (
               <Controller
-                control={controlUpdateLocation}
                 name="region"
+                control={controlUpdateLocation}
                 render={({ field: { onChange, ...field } }) => (
                   <Autocomplete
                     {...field}
                     defaultItems={
                       dataRegion?.data.data && searchRegency !== ""
-                        ? dataRegion.data.data
+                        ? dataRegion?.data.data
                         : []
                     }
                     defaultInputValue={dataDefaultRegion}
                     label="City"
                     labelPlacement="outside"
-                    onInputChange={(search) => handleSearchRegion(search)}
                     variant="bordered"
+                    onInputChange={(search) => handleSearchRegion(search)}
                     isInvalid={errorsUpdateLocation.region !== undefined}
                     errorMessage={errorsUpdateLocation.region?.message}
                     onSelectionChange={(value) => onChange(value)}
-                    placeholder="Search city"
+                    placeholder="Search city here..."
                   >
                     {(regency: IRegency) => (
                       <AutocompleteItem key={`${regency.id}`}>
@@ -186,10 +200,9 @@ const LocationTab = (props: PropTypes) => {
                 )}
               />
             ) : (
-              <div className="h-16 w-full"></div>
+              <div className="h-16 w-full" />
             )}
           </Skeleton>
-
           <Button
             color="danger"
             className="mt-2 disabled:bg-default-500"

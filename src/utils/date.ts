@@ -1,10 +1,13 @@
 import { DateValue } from "@heroui/react";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 
-const standardTime = (time: number) => {
-  return time < 10 ? `0${time}` : time;
+const standardDate = (date: number) => {
+  if (date < 10) {
+    return `0${date}`;
+  } else {
+    return date;
+  }
 };
-
 // ✅ Kirim ke backend sebagai string
 const toDateStandard = (date: DateValue) => {
   const year = date.year;
@@ -15,7 +18,8 @@ const toDateStandard = (date: DateValue) => {
   const minute = "minute" in date ? date.minute : 0;
   const second = "second" in date ? date.second : 0;
 
-  return `${year}-${standardTime(month)}-${standardTime(day)} ${standardTime(hour)}:${standardTime(minute)}:${standardTime(second)}`;
+  const result = `${standardDate(year)}-${standardDate(month)}-${standardDate(day)} ${standardDate(hour)}:${standardDate(minute)}:${standardDate(second)}`;
+  return result;
 };
 
 // ✅ Ambil dari backend, ubah ke ZonedDateTime untuk DatePicker

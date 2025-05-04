@@ -1,8 +1,6 @@
 import { DELAY } from "@/constants/list.constants";
 import useDebounce from "@/hooks/useDebounce";
-import categoryServices from "@/services/category.service";
 import eventServices from "@/services/event.service";
-import { IEventForm } from "@/types/Event";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -10,11 +8,13 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 const schemaUpdateLocation = yup.object().shape({
-  isOnline: yup.string().required("Please select online status"),
+  isOnline: yup.string().required("Please select online or offline"),
+  address: yup.string().required("Please input address"),
   region: yup.string().required("Please select region"),
+  longitude: yup.string().required("Please input longitude coordinate"),
   latitude: yup.string().required("Please select latitude coordinate"),
-  longitude: yup.string().required("Please select longitude coordinate"),
 });
+
 const useLocationTab = () => {
   const debounce = useDebounce();
   const {
@@ -41,14 +41,14 @@ const useLocationTab = () => {
 
   return {
     controlUpdateLocation,
-    handleSubmitUpdateLocation,
     errorsUpdateLocation,
+    handleSubmitUpdateLocation,
     resetUpdateLocation,
     setValueUpdateLocation,
 
-    handleSearchRegion,
-    searchRegency,
     dataRegion,
+    searchRegency,
+    handleSearchRegion,
   };
 };
 

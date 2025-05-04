@@ -1,16 +1,10 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
-import useMediaHandling from "@/hooks/useMediaHandling";
-import categoryServices from "@/services/category.service";
 import eventServices from "@/services/event.service";
-import { ICategory } from "@/types/Category";
 import { IEvent, IEventForm } from "@/types/Event";
 import { toDateStandard } from "@/utils/date";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 const useDetailEvent = () => {
   const { query, isReady } = useRouter();
@@ -63,8 +57,6 @@ const useDetailEvent = () => {
     }
     const payload = {
       ...data,
-      isFeatured: Boolean(data.isFeatured),
-      isPublish: Boolean(data.isPublish),
       startDate: data.startDate ? toDateStandard(data.startDate) : "",
       endDate: data.endDate ? toDateStandard(data.endDate) : "",
     };
@@ -77,6 +69,7 @@ const useDetailEvent = () => {
       location: {
         region: `${data.region}`,
         coordinates: [Number(data.latitude), Number(data.longitude)],
+        address: `${data.address}`,
       },
       banner: data.banner,
     };

@@ -177,10 +177,10 @@ const InfoTab = (props: PropTypes) => {
               )}
             />
           </Skeleton>
-          <Skeleton isLoaded={!!dataEvent?.isPublish} className="rounded-lg">
+          <Skeleton isLoaded={!!dataEvent} className="rounded-lg">
             <Controller
-              control={controlUpdateInfo}
               name="isPublish"
+              control={controlUpdateInfo}
               render={({ field }) => (
                 <Select
                   {...field}
@@ -190,11 +190,15 @@ const InfoTab = (props: PropTypes) => {
                   errorMessage={errorsUpdateInfo.isPublish?.message}
                   disallowEmptySelection
                   defaultSelectedKeys={[
-                    dataEvent?.isFeatured ? "true" : "false",
+                    dataEvent?.isPublish ? "true" : "false",
                   ]}
                 >
-                  <SelectItem key="true">Publish</SelectItem>
-                  <SelectItem key="false">Draft</SelectItem>
+                  <SelectItem key="true" value="true">
+                    Publish
+                  </SelectItem>
+                  <SelectItem key="false" value="false">
+                    Draft
+                  </SelectItem>
                 </Select>
               )}
             />
