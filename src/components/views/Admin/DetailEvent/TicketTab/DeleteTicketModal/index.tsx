@@ -1,3 +1,3 @@
-import DeleteTicketModal from "./DeleteticketModal";
+import DeleteTicketModal from "./DeleteTicketModal";
 
 export default DeleteTicketModal;

@@ -13,15 +13,15 @@ const useDetailCategory = () => {
   const { query, isReady } = useRouter();
   const { setToaster } = useContext(ToasterContext);
 
-  const getCategoryById = async (id: string) => {
-    const { data } = await categoryServices.getCategoryById(id);
+  const getCategoryById = async () => {
+    const { data } = await categoryServices.getCategoryById(`${query.id}`);
 
     return data.data;
   };
 
   const { data: dataCategory, refetch: refetchCategory } = useQuery({
     queryKey: ["Category", query.id],
-    queryFn: () => getCategoryById(`${query.id}`),
+    queryFn: getCategoryById,
     enabled: isReady,
   });
 
