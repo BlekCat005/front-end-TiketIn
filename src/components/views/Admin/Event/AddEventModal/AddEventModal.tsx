@@ -207,23 +207,6 @@ const AddEventModal = (props: PropTypes) => {
                 />
                 <Controller
                   control={control}
-                  name="isOnline"
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      label="Online / Offline"
-                      variant="bordered"
-                      isInvalid={errors.isOnline !== undefined}
-                      errorMessage={errors.isOnline?.message}
-                      disallowEmptySelection
-                    >
-                      <SelectItem key="true">Online</SelectItem>
-                      <SelectItem key="false">Offline</SelectItem>
-                    </Select>
-                  )}
-                />
-                <Controller
-                  control={control}
                   name="description"
                   render={({ field }) => (
                     <Textarea
@@ -239,6 +222,23 @@ const AddEventModal = (props: PropTypes) => {
 
               <p className="text-sm font-bold">Location</p>
               <div className="mb-4 flex flex-col gap-4">
+                <Controller
+                  control={control}
+                  name="isOnline"
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label="Online / Offline"
+                      variant="bordered"
+                      isInvalid={errors.isOnline !== undefined}
+                      errorMessage={errors.isOnline?.message}
+                      disallowEmptySelection
+                    >
+                      <SelectItem key="true">Online</SelectItem>
+                      <SelectItem key="false">Offline</SelectItem>
+                    </Select>
+                  )}
+                />
                 <Controller
                   control={control}
                   name="region"

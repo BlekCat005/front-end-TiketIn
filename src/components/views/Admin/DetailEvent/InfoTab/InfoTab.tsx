@@ -203,7 +203,7 @@ const InfoTab = (props: PropTypes) => {
               )}
             />
           </Skeleton>
-          <Skeleton isLoaded={!!dataEvent?.isFeatured} className="rounded-lg">
+          <Skeleton isLoaded={!!dataEvent} className="rounded-lg">
             <Controller
               control={controlUpdateInfo}
               name="isFeatured"

@@ -1,16 +1,22 @@
-import { DateValue } from "@heroui/react";
+import { DateValue } from "@nextui-org/react";
+import { StringDecoder } from "string_decoder";
+
+interface IRegency {
+  id: string;
+  name: string;
+}
 
 interface IEvent {
   _id?: string;
   name?: string;
   slug?: string;
   category?: string;
-  startDate?: string | DateValue;
-  endDate?: string | DateValue;
-  isPublish?: boolean | string;
   isFeatured?: boolean | string;
+  isPublish?: boolean | string;
   isOnline?: boolean | string;
   description?: string;
+  startDate?: string | DateValue;
+  endDate?: string | DateValue;
   location?: {
     address: string;
     region: string;
@@ -19,18 +25,11 @@ interface IEvent {
   banner?: string | FileList;
 }
 
-interface IRegency {
-  name: string;
-  id: string;
-}
-
 interface IEventForm extends IEvent {
-  region?: string;
+  address?: string;
   latitude?: string;
   longitude?: string;
-  startDate?: DateValue;
-  endDate?: DateValue;
-  address?: string;
+  region?: string;
 }
 
-export type { IEvent, IRegency, IEventForm };
+export type { IRegency, IEvent, IEventForm };
