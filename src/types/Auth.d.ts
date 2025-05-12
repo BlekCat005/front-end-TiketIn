@@ -3,7 +3,7 @@ import { JWT } from "next-auth/jwt";
 
 interface IRegister {
   fullName: string;
-  username: string;
+  userName: string;
   email: string;
   password: string;
   confirmPassword: string;
