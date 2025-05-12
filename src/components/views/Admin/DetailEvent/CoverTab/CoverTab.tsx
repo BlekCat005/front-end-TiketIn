@@ -69,15 +69,15 @@ const CoverTab = (props: PropTypes) => {
             </p>
             <Skeleton
               isLoaded={!!currentCover}
-              className="aspect-video rounded-lg"
+              className="w-full max-w-xs rounded-lg"
             >
-              <div className="relative h-32 w-32 overflow-hidden rounded-lg">
+              <div className="relative aspect-square overflow-hidden rounded-lg">
                 {currentCover && (
                   <Image
                     src={currentCover}
                     alt="icon"
                     fill
-                    className="!relative rounded-lg"
+                    className="object-cover"
                   />
                 )}
               </div>

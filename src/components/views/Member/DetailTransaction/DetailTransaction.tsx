@@ -17,9 +17,9 @@ const DetailTransaction = () => {
         strategy="lazyOnload"
       />
       <CardBody className="gap-8">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <h4 className="font-bold">Order:</h4>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
             <div>
               <p className="text-sm font-semibold">Order ID:</p>
               <Skeleton
