@@ -38,7 +38,7 @@ interface IProfile {
   isActive?: boolean;
   profilePicture?: string | FileList;
   role?: string;
-  username?: string;
+  userName?: string;
 }
 
 interface IUpdatePassword {
