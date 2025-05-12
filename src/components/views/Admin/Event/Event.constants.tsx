@@ -1,4 +1,4 @@
-const COLUMN_LIST_EVENT = [
+const COLUMN_LISTS_EVENT = [
   { name: "BANNER", uid: "banner" },
   { name: "NAME", uid: "name" },
   { name: "START DATE", uid: "startDate" },
@@ -7,4 +7,4 @@ const COLUMN_LIST_EVENT = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export { COLUMN_LIST_EVENT };
+export { COLUMN_LISTS_EVENT };
