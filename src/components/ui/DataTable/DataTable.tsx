@@ -24,7 +24,7 @@ interface PropTypes {
   data: Record<string, unknown>[];
   renderCell: (item: Record<string, unknown>, columnKey: Key) => ReactNode;
 
-  onClickButtonTopContent: () => void;
+  onClickButtonTopContent?: () => void;
   totalPages: number;
   emptyContent: string;
   isLoading?: boolean;
