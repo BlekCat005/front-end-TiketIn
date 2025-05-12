@@ -42,7 +42,9 @@ const Activation = (props: PropTypes) => {
           className="mt-4 w-fit"
           variant="bordered"
           color="danger"
-          onPress={() => router.push("/")}
+          onPress={() =>
+            router.push(status === "success" ? "/auth/login" : "/")
+          }
         >
           Back To Home
         </Button>
