@@ -1,52 +1,51 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
 import eventServices from "@/services/event.service";
 import orderServices from "@/services/order.service";
 import ticketServices from "@/services/ticket.service";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 
 const useDetailTransaction = () => {
   const router = useRouter();
-  const orderId = router.query.id;
+  const [orderId, setOrderId] = useState<string | null>(null);
 
-  const getOrderById = async () => {
-    if (!orderId || typeof orderId !== "string") {
-      throw new Error("Order ID belum tersedia");
+  useEffect(() => {
+    if (router.isReady && typeof router.query.id === "string") {
+      setOrderId(router.query.id);
     }
-    const { data } = await orderServices.getOrderById(orderId);
-    return data.data;
-  };
+  }, [router.isReady, router.query.id]);
 
   const { data: dataTransaction } = useQuery({
     queryKey: ["Transaction", orderId],
-    queryFn: getOrderById,
-    enabled: router.isReady && typeof orderId === "string",
+    queryFn: async () => {
+      if (!orderId) return null;
+      const { data } = await orderServices.getOrderById(orderId);
+      return data.data;
+    },
+    enabled: !!orderId,
     retry: 1,
     refetchOnWindowFocus: false,
   });
 
-  const getEventById = async () => {
-    const { data } = await eventServices.getEventById(
-      `${dataTransaction?.events}`,
-    );
-    return data.data;
-  };
-
   const { data: dataEvent } = useQuery({
     queryKey: ["EventById", dataTransaction?.events],
-    queryFn: getEventById,
+    queryFn: async () => {
+      const { data } = await eventServices.getEventById(
+        dataTransaction!.events,
+      );
+      return data.data;
+    },
     enabled: !!dataTransaction?.events,
   });
 
-  const getTicketsById = async () => {
-    const { data } = await ticketServices.getTicketsById(
-      `${dataTransaction?.ticket}`,
-    );
-    return data.data;
-  };
-
   const { data: dataTicket } = useQuery({
     queryKey: ["Tickets", dataTransaction?.ticket],
-    queryFn: getTicketsById,
+    queryFn: async () => {
+      const { data } = await ticketServices.getTicketsById(
+        dataTransaction!.ticket,
+      );
+      return data.data;
+    },
     enabled: !!dataTransaction?.ticket,
   });
 
