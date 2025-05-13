@@ -6,19 +6,22 @@ import { useRouter } from "next/router";
 
 const useDetailTransaction = () => {
   const router = useRouter();
+  const orderId = router.query.id;
 
   const getOrderById = async () => {
-    if (!router.query.id) throw new Error("No ID");
-    const { data } = await orderServices.getOrderById(`${router.query.id}`);
+    if (!orderId || typeof orderId !== "string") {
+      throw new Error("Order ID belum tersedia");
+    }
+    const { data } = await orderServices.getOrderById(orderId);
     return data.data;
   };
 
   const { data: dataTransaction } = useQuery({
-    queryKey: ["Transaction", router.query.id],
+    queryKey: ["Transaction", orderId],
     queryFn: getOrderById,
-    enabled: router.isReady,
-    retry: 1, // kasih 1x retry untuk jaga-jaga
-    refetchOnWindowFocus: false, // biar nggak refetch saat tab aktif lagi
+    enabled: router.isReady && typeof orderId === "string",
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   const getEventById = async () => {
@@ -29,7 +32,7 @@ const useDetailTransaction = () => {
   };
 
   const { data: dataEvent } = useQuery({
-    queryKey: ["EventById"],
+    queryKey: ["EventById", dataTransaction?.events],
     queryFn: getEventById,
     enabled: !!dataTransaction?.events,
   });
@@ -42,7 +45,7 @@ const useDetailTransaction = () => {
   };
 
   const { data: dataTicket } = useQuery({
-    queryKey: ["Tickets"],
+    queryKey: ["Tickets", dataTransaction?.ticket],
     queryFn: getTicketsById,
     enabled: !!dataTransaction?.ticket,
   });
