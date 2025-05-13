@@ -8,14 +8,17 @@ const useDetailTransaction = () => {
   const router = useRouter();
 
   const getOrderById = async () => {
+    if (!router.query.id) throw new Error("No ID");
     const { data } = await orderServices.getOrderById(`${router.query.id}`);
     return data.data;
   };
 
   const { data: dataTransaction } = useQuery({
-    queryKey: ["Transaction"],
+    queryKey: ["Transaction", router.query.id],
     queryFn: getOrderById,
     enabled: router.isReady,
+    retry: 1, // kasih 1x retry untuk jaga-jaga
+    refetchOnWindowFocus: false, // biar nggak refetch saat tab aktif lagi
   });
 
   const getEventById = async () => {
