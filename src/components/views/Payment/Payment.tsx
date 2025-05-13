@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const Payment = () => {
   const router = useRouter();
   const { mutateUpdateOrderStatus } = usePayment();
-  const { order_id, status } = router.query;
+  const { order_id, transaction_status } = router.query;
 
   useEffect(() => {
     if (router.isReady) {
@@ -25,7 +25,7 @@ const Payment = () => {
         />
         <Image
           src={
-            router.query.status === "success"
+            router.query.transaction_status === "settlement"
               ? "/images/illustrations/success.svg"
               : "/images/illustrations/pending.svg"
           }
@@ -36,7 +36,7 @@ const Payment = () => {
       </div>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-3xl font-bold capitalize text-danger-500">
-          Transaction {status}
+          Transaction {transaction_status}
         </h1>
         <Button
           className="mt-4 w-fit"
