@@ -9,6 +9,7 @@ import environment from "@/config/environment";
 
 const DetailTransaction = () => {
   const { dataTransaction, dataEvent, dataTicket } = useDetailTransaction();
+
   return (
     <Card className="px-5 py-4">
       <Script
@@ -58,7 +59,9 @@ const DetailTransaction = () => {
                   color={
                     dataTransaction?.status === "completed"
                       ? "success"
-                      : "warning"
+                      : dataTransaction?.status === "pending"
+                        ? "warning"
+                        : "default"
                   }
                   variant="flat"
                   size="sm"

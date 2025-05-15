@@ -19,27 +19,27 @@ const BUTTON_ITEMS = [
 const SOCIAL_ITEMS = [
   {
     label: "Facebook",
-    href: "https://facebook.com/acara",
+    href: "https://facebook.com/tiketin",
     icon: <FaFacebook />,
   },
   {
     label: "Instagram",
-    href: "https://instagram.com/@acara",
+    href: "https://instagram.com/@tiketin",
     icon: <FaInstagram />,
   },
   {
     label: "TikTok",
-    href: "https://tiktok.com/@acara",
+    href: "https://tiktok.com/@tiketin",
     icon: <FaTiktok />,
   },
   {
     label: "Twitter",
-    href: "https://twitter.com/@acara",
+    href: "https://twitter.com/@tiketin",
     icon: <FaTwitter />,
   },
   {
     label: "YouTube",
-    href: "https://youtube.com/@acara",
+    href: "https://youtube.com/@tiketin",
     icon: <FaYoutube />,
   },
 ];

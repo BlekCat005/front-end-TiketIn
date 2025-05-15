@@ -15,7 +15,8 @@ const useDetailTransaction = () => {
     }
   }, [router.isReady, router.query.id]);
 
-  const { data: dataTransaction } = useQuery({
+  // Fetch transaction data
+  const { data: dataTransaction, refetch: refetchTransaction } = useQuery({
     queryKey: ["Transaction", orderId],
     queryFn: async () => {
       if (!orderId) return null;
@@ -25,8 +26,10 @@ const useDetailTransaction = () => {
     enabled: !!orderId,
     retry: 1,
     refetchOnWindowFocus: false,
+    refetchInterval: 30000, // Polling every 30 seconds to get updated status
   });
 
+  // Fetch event data based on transaction
   const { data: dataEvent } = useQuery({
     queryKey: ["EventById", dataTransaction?.events],
     queryFn: async () => {
@@ -38,6 +41,7 @@ const useDetailTransaction = () => {
     enabled: !!dataTransaction?.events,
   });
 
+  // Fetch ticket data based on transaction
   const { data: dataTicket } = useQuery({
     queryKey: ["Tickets", dataTransaction?.ticket],
     queryFn: async () => {
@@ -49,10 +53,19 @@ const useDetailTransaction = () => {
     enabled: !!dataTransaction?.ticket,
   });
 
+  // Handle logic if transaction status is 'completed'
+  useEffect(() => {
+    if (dataTransaction?.status === "completed") {
+      // Here, you can add logic to display success message, enable download button, etc.
+      console.log("Transaction completed!");
+    }
+  }, [dataTransaction?.status]);
+
   return {
     dataTransaction,
     dataEvent,
     dataTicket,
+    refetchTransaction, // Expose refetch in case you want to manually trigger it
   };
 };
 

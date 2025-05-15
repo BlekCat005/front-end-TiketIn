@@ -16,13 +16,19 @@ const LandingPageLayoutFooter = () => {
         <div>
           <h4 className="text-xl text-white">Customer Service</h4>
           <p className="text-gray-600">
-            <Link href="mailto:hello@acara.id">hello@acara.id</Link> |{" "}
-            <Link href="tel:+621234567890">+62 1234 5678 90</Link>
+            <Link href="mailto:237006085@student.unsil.ac.id">
+              237006085@student.unsil.ac.id
+            </Link>{" "}
+            |{" "}
+            <Link href="mailto:237006088@student.unsil.ac.id">
+              237006088@student.unsil.ac.id
+            </Link>{" "}
+            |{" "}
           </p>
         </div>
         <div>
           <h4 className="text-xl text-white">Office</h4>
-          <p className="text-gray-600">Jl. Jend. Sudriman No. 123, Jakarta</p>
+          <p className="text-gray-600">Jl. Siliwangi</p>
         </div>
       </div>
 
@@ -52,7 +58,7 @@ const LandingPageLayoutFooter = () => {
           ))}
         </div>
         <p className="w-full text-center text-gray-600">
-          Copyright © 2025 Acara. All rights reserved.
+          Copyright © 2025 Kelompok 44. All rights reserved.
         </p>
       </div>
     </div>
